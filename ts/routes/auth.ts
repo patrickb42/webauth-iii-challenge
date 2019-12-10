@@ -1,9 +1,9 @@
-/* all lines commented out are for express-sessions */
+/* all lines commented out are for express-sessions and jwt-only lines have a # */
 import * as Express from 'express';
 import * as Bcrypt from 'bcryptjs';
 
 import {
-  JWTRequest,
+  JWTRequest, // #
   UserCredentials as UserCredentialsType,
 } from '../types';
 import { SALT_ROUNDS } from '../globalConstants';
@@ -28,8 +28,9 @@ const register = async (req: Express.Request, res: Express.Response) => {
     const [result] = await UserCredentials.insert({ item: { username, hashedPassword } });
     if (result) {
       // req.session.user = result;
-      const token = generateToken(result);
-      return res.status(201).json({ token });
+      const token = generateToken(result); // #
+      // return res.status(201).json(result);
+      return res.status(201).json({ token }); // #
     }
     return res.status(500).json({ message: 'error registering user' });
   } catch (err) {
@@ -55,8 +56,9 @@ const login = async (req: Express.Request, res: Express.Response) => {
       //   sourceObject: result,
       //   filter: { id: undefined, username },
       // });
-      const token = generateToken(result);
-      return res.status(200).json(token);
+      const token = generateToken(result); // #
+      // return res.status(200).json(result);
+      return res.status(200).json({ token }); // #
     }
     return res.status(403).json({ message: 'invalid credentials' });
   } catch (error) {
